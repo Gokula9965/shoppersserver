@@ -61,6 +61,9 @@ const getCategory = asyncHandler(async (req, res) => {
 const getSingleProduct = asyncHandler(async (req, res) => {
     const id = req.params.id;
     const getProduct = await apiData.findOne({ _id: id });
+    if (getProduct && getProduct.reviews) {
+         getProduct.reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }    
     if (getProduct)
     {
         res.status(200).send(getProduct);    
@@ -69,5 +72,12 @@ const getSingleProduct = asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error("No product is found");
     }
-})
-module.exports = { productsFromStore ,updatedCategory,getProducts,getCategory,getSingleProduct};
+});
+
+const addReviewToProducts = asyncHandler(async (req, res) => {
+    const id = req?.params?.id;
+    const data = req?.body;
+    await apiData.updateOne({ _id: id }, { $push: { reviews: data } });
+    res.status(200).send({ msg: "updated" });
+});
+module.exports = { productsFromStore ,updatedCategory,getProducts,getCategory,getSingleProduct,addReviewToProducts};
