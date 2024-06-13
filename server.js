@@ -12,7 +12,7 @@ require("dotenv").config();
 const app = express();
 connectionDb();
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin:process.env.FRONTEND}));
 app.use('/user', userRouter);
 app.use('/products', productsFromStoreRouter);
 app.use('/cart', cartRouter);
