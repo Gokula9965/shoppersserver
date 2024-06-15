@@ -62,7 +62,7 @@ function generateCustomerInformation(doc, invoice) {
     )
     .moveDown();
 
-  generateHr(doc, 252);
+  generateHr(doc, 254);
 }
 
 function generateInvoiceTable(doc, invoice) {
@@ -95,13 +95,34 @@ function generateInvoiceTable(doc, invoice) {
 
     generateHr(doc, position + 20);
   }
-
+ const subtotal=invoice?.totalAmount - invoice?.tax
   const subtotalPosition = invoiceTableTop + (i + 1) * 30;
   generateTableRow(
     doc,
     subtotalPosition,
     "",
-    "Paid Amount",
+    "Subtotal",
+    "",
+    formatCurrency(subtotal)
+  );
+
+  const taxPosition = subtotalPosition + 20;
+  generateTableRow(
+    doc,
+    taxPosition,
+    "",
+    "Tax",
+    "",
+    formatCurrency(invoice?.tax)
+  );
+
+  const totalPosition = taxPosition + 25;
+  doc.font("Helvetica-Bold");
+  generateTableRow(
+    doc,
+    totalPosition,
+    "",
+    "Total",
     "",
     formatCurrency(invoice?.totalAmount)
   );

@@ -48,7 +48,6 @@ const getCartItems = asyncHandler(async (req, res) => {
     res.status(200).json({ cart ,cartCount});
 });
 const deleteCartItem = asyncHandler(async (req, res) => {
-    console.log(req?.params?.id);
     await cartSchema.deleteOne({ $and: [{ userId: req?.user?.user?.id }, { _id: req?.params?.id }] });
     const count = await cartSchema.find({ userId: req?.user?.user?.id }).countDocuments();
     res.status(200).send(count);
@@ -56,7 +55,6 @@ const deleteCartItem = asyncHandler(async (req, res) => {
 
 const updateCart = asyncHandler(async (req, res) => {
     const data = req?.body;
-    console.log(data);
     const update = await cartSchema.updateOne({ $and: [{ userId: req?.user?.user?.id }, { _id: data?.id }] }, { $set: { quantity: data?.quantity } })
     console.log(update);
     res.status(200).send({ message: "sucessfully updated" });

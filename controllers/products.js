@@ -80,4 +80,25 @@ const addReviewToProducts = asyncHandler(async (req, res) => {
     await apiData.updateOne({ _id: id }, { $push: { reviews: data } });
     res.status(200).send({ msg: "updated" });
 });
-module.exports = { productsFromStore ,updatedCategory,getProducts,getCategory,getSingleProduct,addReviewToProducts};
+
+const productsStockUpdate = asyncHandler(async (req, res) => {
+    const productsData = req?.body;
+    let count = 0;
+    for (let i = 0; i < productsData?.length; i++)
+    {
+        const findProduct = await apiData.findOne({ title: productsData[i]?.title });
+        const newStock=(findProduct?.stock - productsData[i]?.quantity) > 0 ? (findProduct?.stock - productsData[i]?.quantity) : 0;
+        await apiData.updateOne({ title: productsData[i]?.title }, { $set: { stock: newStock } });       
+        count++;
+    }
+    if (count === productsData?.length)
+    {
+        res.status(200).json({ message: "all selected products stock got updated" });
+    }
+    else {
+        res.status(400)
+        throw new Error("Something went wrong in updating the stock");
+    }
+
+})
+module.exports = { productsFromStore ,updatedCategory,getProducts,getCategory,getSingleProduct,addReviewToProducts,productsStockUpdate};

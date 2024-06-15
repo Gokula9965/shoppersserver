@@ -3,7 +3,7 @@ const customerDetails = require("../Schema/customerDetails");
 
 const addCustomerData = asyncHandler(async (req, res) => {
     try {
-        let { orderId, firstName, lastName, address1, address2,city, state, postalCode, country, email, phone, cartItems,total ,invoiceNumber} = req?.body;   
+        let { orderId, firstName, lastName, address1, address2,city, state, postalCode, country, email, phone, cartItems,total ,invoiceNumber,tax} = req?.body;   
         postalCode = Number(postalCode);
         address2 = address2 ?? null;
         if (!orderId || !firstName || !lastName || !address1 || !city || !state || !postalCode || !country || !email || !phone || !cartItems || !invoiceNumber) {
@@ -25,6 +25,7 @@ const addCustomerData = asyncHandler(async (req, res) => {
             postalCode,
             country,
             customerItems: cartItems,
+            tax,
             totalAmount: total,
             invoiceNumber
         });

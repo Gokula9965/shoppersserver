@@ -84,6 +84,10 @@ const customerSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    tax:{
+        type: Number,
+        required:true
+    },
     customerItems: [cartSchema],
     orderedAt: {
          type: Date,
